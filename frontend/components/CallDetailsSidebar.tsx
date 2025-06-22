@@ -39,9 +39,9 @@ const CallDetailsSidebar = ({ call, onClose }) => {
           <div className="flex justify-between items-start">
             <div>
               <h2 className="text-xl font-semibold text-gray-800">
-                {call.phoneNumber}
+                {call.user_phone}
               </h2>
-              <p className="text-sm text-gray-600 mt-1">{call.callerName}</p>
+              <p className="text-sm text-gray-600 mt-1">{call.user_name}</p>
               <div className="flex flex-wrap gap-2 mt-3">
                 <span
                   className={`px-2.5 py-1 rounded-full text-xs font-medium ${statusColors[call.status]}`}

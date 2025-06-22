@@ -1,23 +1,16 @@
 export interface CallEvent {
   type: 'new_call' | 'call_update' | 'call_end' | 'call_transfer'
   data: {
-    id: number
-    callerName: string
-    phoneNumber: string
-    duration: string
-    status: string
-    topic: string
+    user_phone: string
+    user_name: string
+    call_duration: string
+    self_harm_percentage: number
+    homicidal_percentage: number
+    psychosis_percentage: number
+    distress_percentage: number
+    call_priority: string
+    call_transcript: string
     summary: string
-    priority: string
-    transcript: string
-    riskAssessment: {
-      selfHarm: number
-      distress: number
-      homicidal: number
-      psychosis: number
-    }
-    date?: string
-    time?: string
   }
 }
 
@@ -27,14 +20,19 @@ class WebSocketService {
   private maxReconnectAttempts = 5
   private reconnectDelay = 1000
   private eventListeners: Map<string, Function[]> = new Map()
+  private isConnecting = false
 
-  connect(url: string = 'ws://localhost:8000/ws/calls') {
+  connect(url: string = 'ws://localhost:5000/ws') {
+    if (this.isConnecting) return
+    
     try {
+      this.isConnecting = true
       this.ws = new WebSocket(url)
       
       this.ws.onopen = () => {
-        console.log('WebSocket connected')
+        console.log('✅ WebSocket connected to Flask backend')
         this.reconnectAttempts = 0
+        this.isConnecting = false
         this.emit('connected')
       }
 
@@ -48,16 +46,19 @@ class WebSocketService {
       }
 
       this.ws.onclose = () => {
-        console.log('WebSocket disconnected')
+        console.log('❌ WebSocket disconnected from Flask backend')
+        this.isConnecting = false
         this.emit('disconnected')
         this.attemptReconnect()
       }
 
       this.ws.onerror = (error) => {
-        console.error('WebSocket error:', error)
+        console.error('❌ WebSocket error:', error)
+        this.isConnecting = false
       }
     } catch (error) {
       console.error('Failed to connect WebSocket:', error)
+      this.isConnecting = false
     }
   }
 
@@ -70,7 +71,7 @@ class WebSocketService {
         this.emit('callUpdate', event.data)
         break
       case 'call_end':
-        this.emit('callEnd', event.data.id)
+        this.emit('callEnd', event.data.user_phone)
         break
       case 'call_transfer':
         this.emit('callTransfer', event.data)
@@ -83,13 +84,13 @@ class WebSocketService {
   private attemptReconnect() {
     if (this.reconnectAttempts < this.maxReconnectAttempts) {
       this.reconnectAttempts++
-      console.log(`Attempting to reconnect (${this.reconnectAttempts}/${this.maxReconnectAttempts})`)
+      console.log(`🔄 Attempting to reconnect (${this.reconnectAttempts}/${this.maxReconnectAttempts})`)
       
       setTimeout(() => {
         this.connect()
       }, this.reconnectDelay * this.reconnectAttempts)
     } else {
-      console.error('Max reconnection attempts reached')
+      console.error('❌ Max reconnection attempts reached')
     }
   }
 
@@ -127,8 +128,36 @@ class WebSocketService {
   send(message: any) {
     if (this.ws && this.ws.readyState === WebSocket.OPEN) {
       this.ws.send(JSON.stringify(message))
+    } else {
+      console.warn('WebSocket is not connected')
     }
+  }
+
+  // Test methods for debugging
+  sendTestMessage() {
+    this.send({
+      type: 'ping',
+      message: 'Hello from React frontend!'
+    })
+  }
+
+  simulateNewCall() {
+    this.send({
+      type: 'simulate_call',
+      data: {
+        user_phone: '+1 (555) 999-9999',
+        user_name: 'Test User',
+        call_duration: '2m 30s',
+        self_harm_percentage: 25,
+        homicidal_percentage: 5,
+        psychosis_percentage: 15,
+        distress_percentage: 40,
+        call_priority: 'Normal',
+        call_transcript: 'Agent: Hello, how can I help you today?\nUser: Hi, this is a test call.',
+        summary: 'Test call for WebSocket functionality.'
+      }
+    })
   }
 }
 
-export const websocketService = new WebSocketService() 
+export const websocketService = new WebSocketService()

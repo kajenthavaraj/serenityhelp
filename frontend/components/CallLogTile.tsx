@@ -59,9 +59,9 @@ const CallLogTile = ({ call, onViewDetails }) => {
           </span>
         </div>
         <h3 className="text-lg font-semibold text-gray-800">
-          {call.phoneNumber}
+          {call.user_phone}
         </h3>
-        <p className="text-sm text-gray-600 mt-1">{call.callerName}</p>
+        <p className="text-sm text-gray-600 mt-1">{call.user_name}</p>
       </div>
       <div className="px-5 py-4">
         <div className="flex justify-between items-center mb-3">

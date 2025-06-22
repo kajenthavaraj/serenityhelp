@@ -5,7 +5,7 @@ import { useCallContext } from '../contexts/CallContext'
 import { BarChart2Icon, PhoneIcon, UserIcon, AlertTriangleIcon, UsersIcon } from 'lucide-react'
 
 const Dashboard = () => {
-  const [selectedCall, setSelectedCall] = useState(null)
+  const [selectedCall, setSelectedCall] = useState<any>(null)
   const { calls } = useCallContext()
   
   const inProgressCalls = calls.filter(
@@ -31,7 +31,7 @@ const Dashboard = () => {
     if (a.priority === 'Emergency' && b.priority !== 'Emergency') return -1
     if (a.priority !== 'Emergency' && b.priority === 'Emergency') return 1
     // Then sort by priority within each status group
-    const priorityOrder = {
+    const priorityOrder: Record<string, number> = {
       'High Priority': 2,
       Normal: 3,
       'Low Priority': 4,
@@ -49,13 +49,15 @@ const Dashboard = () => {
               <p className="text-gray-600 text-sm">AI-Powered Support Center</p>
             </div>
           </div>
-          <div className="flex items-center bg-white rounded-lg shadow px-4 py-2">
-            <div className="flex items-center">
-              <PhoneIcon className="text-blue-500" size={18} />
-              <span className="ml-2 text-gray-500 text-sm">Active Calls:</span>
-              <span className="ml-2 text-xl font-bold text-blue-600">
-                {inProgressCalls.length}
-              </span>
+          <div className="flex items-center gap-4">
+            <div className="flex items-center bg-white rounded-lg shadow px-4 py-2">
+              <div className="flex items-center">
+                <PhoneIcon className="text-blue-500" size={18} />
+                <span className="ml-2 text-gray-500 text-sm">Active Calls:</span>
+                <span className="ml-2 text-xl font-bold text-blue-600">
+                  {inProgressCalls.length}
+                </span>
+              </div>
             </div>
           </div>
         </div>

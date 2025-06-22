@@ -99,9 +99,9 @@ const CallTransfer = () => {
             <div className="flex justify-between items-start">
               <div>
                 <h1 className="text-2xl font-bold text-gray-800">
-                  {call.phoneNumber}
+                  {call.user_phone}
                 </h1>
-                <p className="text-lg text-gray-600 mt-1">{call.callerName}</p>
+                <p className="text-lg text-gray-600 mt-1">{call.user_name}</p>
                 <div className="flex flex-wrap gap-3 mt-4">
                   <span
                     className={`px-3 py-1.5 rounded-full text-sm font-medium ${statusColors[call.status]}`}
