@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: sentiment-agent
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python3 analyze_emotions.py
