@@ -1,0 +1,5 @@
+# requirements.txt
+uagents>=0.13.0
+uagents-ai-engine>=0.4.0
+pydantic>=2.0.0
+uvloop>=0.17.0
