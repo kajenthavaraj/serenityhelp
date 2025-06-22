@@ -1,27 +1,29 @@
 import React, { useState } from 'react'
 import CallLogTile from './CallLogTile'
 import CallDetailsSidebar from './CallDetailsSidebar'
-import { callLogs } from '../utils/mockData'
+import { useCallContext } from '../contexts/CallContext'
 import { BarChart2Icon, PhoneIcon, UserIcon, AlertTriangleIcon, UsersIcon } from 'lucide-react'
 
 const Dashboard = () => {
   const [selectedCall, setSelectedCall] = useState(null)
-  const inProgressCalls = callLogs.filter(
+  const { calls } = useCallContext()
+  
+  const inProgressCalls = calls.filter(
     (call) => call.status === 'in-progress',
   )
   
   // Count emergency service calls (connected-to-911)
-  const emergencyServiceCalls = callLogs.filter(
+  const emergencyServiceCalls = calls.filter(
     (call) => call.status === 'connected-to-911'
   ).length
   
   // Count human agent calls (connected-to-agent)
-  const humanAgentCalls = callLogs.filter(
+  const humanAgentCalls = calls.filter(
     (call) => call.status === 'connected-to-agent'
   ).length
 
   // Sort calls by status (in-progress first) and then by priority
-  const sortedCalls = [...callLogs].sort((a, b) => {
+  const sortedCalls = [...calls].sort((a, b) => {
     // First sort by status - in-progress comes first
     if (a.status === 'in-progress' && b.status !== 'in-progress') return -1
     if (a.status !== 'in-progress' && b.status === 'in-progress') return 1

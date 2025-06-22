@@ -11,11 +11,11 @@ export const callLogs = [
     priority: 'Normal',
     transcript: `
 Agent: Hello, thank you for calling SerenityHelp. How can I help you today?
-Sarah: Hi, I've been feeling really anxious lately and need some help managing it.
+User: Hi, I've been feeling really anxious lately and need some help managing it.
 Agent: I'd be happy to help you with that, Sarah. First, let's talk about what's been causing your anxiety.
-Sarah: Sure, I've been feeling overwhelmed with work and personal life.
+User: Sure, I've been feeling overwhelmed with work and personal life.
 Agent: Perfect, I can understand that feeling. Let's start with some breathing exercises and then discuss coping strategies. Have you tried any relaxation techniques yet?
-Sarah: No, not really. What would you recommend?
+User: No, not really. What would you recommend?
 Agent: I'll guide you through a simple breathing exercise right now. While we do that, let me explain some other anxiety management techniques...
     `,
     riskAssessment: {
@@ -39,9 +39,9 @@ Agent: I'll guide you through a simple breathing exercise right now. While we do
     priority: 'High Priority',
     transcript: `
 Agent: Thank you for calling SerenityHelp. How may I assist you today?
-Michael: Hi, I'm having a really bad panic attack and can't seem to calm down.
+User: Hi, I'm having a really bad panic attack and can't seem to calm down.
 Agent: I'd be happy to help you with that. Let me guide you through some immediate calming techniques.
-Michael: Thank you, I appreciate it.
+User: Thank you, I appreciate it.
 Agent: Of course! Let's start with deep breathing. Can you take a slow, deep breath with me?
     `,
     riskAssessment: {
@@ -65,9 +65,9 @@ Agent: Of course! Let's start with deep breathing. Can you take a slow, deep bre
     priority: 'Emergency',
     transcript: `
 Agent: Thank you for calling SerenityHelp. How may I assist you today?
-Emily: Hi, I've been having thoughts about ending my life and I don't know what to do.
+User: Hi, I've been having thoughts about ending my life and I don't know what to do.
 Agent: I'd be happy to help you with that. Let me pull up your account information.
-Emily: Thank you, I appreciate it.
+User: Thank you, I appreciate it.
 Agent: Of course! Now, let's address your concerns about these thoughts...
     `,
     riskAssessment: {
@@ -91,9 +91,9 @@ Agent: Of course! Now, let's address your concerns about these thoughts...
     priority: 'Low Priority',
     transcript: `
 Agent: Thank you for calling SerenityHelp. How may I assist you today?
-David: Hi, I'm looking for some coping tips to help me manage my stress better.
+User: Hi, I'm looking for some coping tips to help me manage my stress better.
 Agent: I'd be happy to help you with that. Let me pull up your account information.
-David: Thank you, I appreciate it.
+User: Thank you, I appreciate it.
 Agent: Of course! Now, let's address your concerns about coping strategies...
     `,
     riskAssessment: {
@@ -117,9 +117,9 @@ Agent: Of course! Now, let's address your concerns about coping strategies...
     priority: 'Normal',
     transcript: `
 Agent: Thank you for calling SerenityHelp. How may I assist you today?
-Aisha: Hi, I've been feeling mildly stressed lately and need some advice.
+User: Hi, I've been feeling mildly stressed lately and need some advice.
 Agent: I'd be happy to help you with that. Let me pull up your account information.
-Aisha: Thank you, I appreciate it.
+User: Thank you, I appreciate it.
 Agent: Of course! Now, let's address your concerns about mild stress...
     `,
     riskAssessment: {
@@ -143,9 +143,9 @@ Agent: Of course! Now, let's address your concerns about mild stress...
     priority: 'High Priority',
     transcript: `
 Agent: Thank you for calling SerenityHelp. How may I assist you today?
-James: Hi, I'm struggling with addiction and need help finding recovery resources.
+User: Hi, I'm struggling with addiction and need help finding recovery resources.
 Agent: I'd be happy to help you with that. Let me pull up your account information.
-James: Thank you, I appreciate it.
+User: Thank you, I appreciate it.
 Agent: Of course! Now, let's address your concerns about addiction recovery...
     `,
     riskAssessment: {
@@ -169,9 +169,9 @@ Agent: Of course! Now, let's address your concerns about addiction recovery...
     priority: 'Urgent',
     transcript: `
 Agent: Thank you for calling SerenityHelp. How may I assist you today?
-Olivia: Hi, I just really need someone to talk to right now. I'm feeling very alone.
+User: Hi, I just really need someone to talk to right now. I'm feeling very alone.
 Agent: I'd be happy to help you with that. Let me pull up your account information.
-Olivia: Thank you, I appreciate it.
+User: Thank you, I appreciate it.
 Agent: Of course! Now, let's address your concerns about feeling isolated...
     `,
     riskAssessment: {
@@ -195,9 +195,9 @@ Agent: Of course! Now, let's address your concerns about feeling isolated...
     priority: 'Normal',
     transcript: `
 Agent: Thank you for calling SerenityHelp. How may I assist you today?
-Robert: Hi, I've been dealing with anxiety and need some help managing it.
+User: Hi, I've been dealing with anxiety and need some help managing it.
 Agent: I'd be happy to help you with that. Let me pull up your account information.
-Robert: Thank you, I appreciate it.
+User: Thank you, I appreciate it.
 Agent: Of course! Now, let's address your concerns about anxiety management...
     `,
     riskAssessment: {
@@ -221,9 +221,9 @@ Agent: Of course! Now, let's address your concerns about anxiety management...
     priority: 'Low Priority',
     transcript: `
 Agent: Thank you for calling SerenityHelp. How may I assist you today?
-Sophia: Hi, I need some coping tips to help me get through a difficult time.
+User: Hi, I need some coping tips to help me get through a difficult time.
 Agent: I'd be happy to help you with that. Let me pull up your account information.
-Sophia: Thank you, I appreciate it.
+User: Thank you, I appreciate it.
 Agent: Of course! Now, let's address your concerns about coping strategies...
     `,
     riskAssessment: {
@@ -247,9 +247,9 @@ Agent: Of course! Now, let's address your concerns about coping strategies...
     priority: 'High Priority',
     transcript: `
 Agent: Thank you for calling SerenityHelp. How may I assist you today?
-Alex: Hi, I'm having a panic attack and need help calming down.
+User: Hi, I'm having a panic attack and need help calming down.
 Agent: I'd be happy to help you with that. Let me pull up your account information.
-Alex: Thank you, I appreciate it.
+User: Thank you, I appreciate it.
 Agent: Of course! Now, let's address your concerns about the panic attack...
     `,
     riskAssessment: {
@@ -272,9 +272,9 @@ Agent: Of course! Now, let's address your concerns about the panic attack...
     priority: 'Emergency',
     transcript: `
 Agent: Thank you for calling SerenityHelp. How may I assist you today?
-Maria: Hi, I'm having thoughts about harming someone and I'm scared.
+User: Hi, I'm having thoughts about harming someone and I'm scared.
 Agent: I'd be happy to help you with that. Let me pull up your account information.
-Maria: Thank you, I appreciate it.
+User: Thank you, I appreciate it.
 Agent: Of course! Now, let's address your concerns about these thoughts...
     `,
     riskAssessment: {
@@ -297,9 +297,9 @@ Agent: Of course! Now, let's address your concerns about these thoughts...
     priority: 'High Priority',
     transcript: `
 Agent: Thank you for calling SerenityHelp. How may I assist you today?
-Kevin: Hi, I'm struggling with addiction and need help finding treatment.
+User: Hi, I'm struggling with addiction and need help finding treatment.
 Agent: I'd be happy to help you with that. Let me pull up your account information.
-Kevin: Thank you, I appreciate it.
+User: Thank you, I appreciate it.
 Agent: Of course! Now, let's address your concerns about addiction treatment...
     `,
     riskAssessment: {
@@ -322,9 +322,9 @@ Agent: Of course! Now, let's address your concerns about addiction treatment...
     priority: 'Normal',
     transcript: `
 Agent: Thank you for calling SerenityHelp. How may I assist you today?
-Lisa: Hi, I've been feeling mildly stressed and need some help managing it.
+User: Hi, I've been feeling mildly stressed and need some help managing it.
 Agent: I'd be happy to help you with that. Let me pull up your account information.
-Lisa: Thank you, I appreciate it.
+User: Thank you, I appreciate it.
 Agent: Of course! Now, let's address your concerns about mild stress...
     `,
     riskAssessment: {
@@ -347,9 +347,9 @@ Agent: Of course! Now, let's address your concerns about mild stress...
     priority: 'High Priority',
     transcript: `
 Agent: Thank you for calling SerenityHelp. How may I assist you today?
-Carlos: Hi, I'm having a really bad panic attack and need help right now.
+User: Hi, I'm having a really bad panic attack and need help right now.
 Agent: I'd be happy to help you with that. Let me pull up your account information.
-Carlos: Thank you, I appreciate it.
+User: Thank you, I appreciate it.
 Agent: Of course! Now, let's address your concerns about the panic attack...
     `,
     riskAssessment: {
@@ -372,9 +372,9 @@ Agent: Of course! Now, let's address your concerns about the panic attack...
     priority: 'Low Priority',
     transcript: `
 Agent: Thank you for calling SerenityHelp. How may I assist you today?
-Jennifer: Hi, I just really need someone to talk to. I'm feeling very lonely.
+User: Hi, I just really need someone to talk to. I'm feeling very lonely.
 Agent: I'd be happy to help you with that. Let me pull up your account information.
-Jennifer: Thank you, I appreciate it.
+User: Thank you, I appreciate it.
 Agent: Of course! Now, let's address your concerns about feeling lonely...
     `,
     riskAssessment: {
@@ -397,9 +397,9 @@ Agent: Of course! Now, let's address your concerns about feeling lonely...
     priority: 'Emergency',
     transcript: `
 Agent: Thank you for calling SerenityHelp. How may I assist you today?
-Marcus: Hi, I'm experiencing some really scary thoughts and I think I might be losing touch with reality.
+User: Hi, I'm experiencing some really scary thoughts and I think I might be losing touch with reality.
 Agent: I'd be happy to help you with that. Let me pull up your account information.
-Marcus: Thank you, I appreciate it.
+User: Thank you, I appreciate it.
 Agent: Of course! Now, let's address your concerns about these experiences...
     `,
     riskAssessment: {
@@ -422,9 +422,9 @@ Agent: Of course! Now, let's address your concerns about these experiences...
     priority: 'Normal',
     transcript: `
 Agent: Thank you for calling SerenityHelp. How may I assist you today?
-Amanda: Hi, I've been feeling really anxious and need help managing it.
+User: Hi, I've been feeling really anxious and need help managing it.
 Agent: I'd be happy to help you with that. Let me pull up your account information.
-Amanda: Thank you, I appreciate it.
+User: Thank you, I appreciate it.
 Agent: Of course! Now, let's address your concerns about anxiety...
     `,
     riskAssessment: {
@@ -447,9 +447,9 @@ Agent: Of course! Now, let's address your concerns about anxiety...
     priority: 'High Priority',
     transcript: `
 Agent: Thank you for calling SerenityHelp. How may I assist you today?
-Ryan: Hi, I'm in recovery but I'm worried about relapsing and need support.
+User: Hi, I'm in recovery but I'm worried about relapsing and need support.
 Agent: I'd be happy to help you with that. Let me pull up your account information.
-Ryan: Thank you, I appreciate it.
+User: Thank you, I appreciate it.
 Agent: Of course! Now, let's address your concerns about relapse prevention...
     `,
     riskAssessment: {
@@ -472,9 +472,9 @@ Agent: Of course! Now, let's address your concerns about relapse prevention...
     priority: 'Low Priority',
     transcript: `
 Agent: Thank you for calling SerenityHelp. How may I assist you today?
-Sofia: Hi, I need some coping tips to help me deal with my current situation.
+User: Hi, I need some coping tips to help me deal with my current situation.
 Agent: I'd be happy to help you with that. Let me pull up your account information.
-Sofia: Thank you, I appreciate it.
+User: Thank you, I appreciate it.
 Agent: Of course! Now, let's address your concerns about coping strategies...
     `,
     riskAssessment: {
@@ -497,9 +497,9 @@ Agent: Of course! Now, let's address your concerns about coping strategies...
     priority: 'High Priority',
     transcript: `
 Agent: Thank you for calling SerenityHelp. How may I assist you today?
-Daniel: Hi, I'm having a panic attack and can't seem to calm down.
+User: Hi, I'm having a panic attack and can't seem to calm down.
 Agent: I'd be happy to help you with that. Let me pull up your account information.
-Daniel: Thank you, I appreciate it.
+User: Thank you, I appreciate it.
 Agent: Of course! Now, let's address your concerns about the panic attack...
     `,
     riskAssessment: {
@@ -522,9 +522,9 @@ Agent: Of course! Now, let's address your concerns about the panic attack...
     priority: 'Emergency',
     transcript: `
 Agent: Thank you for calling SerenityHelp. How may I assist you today?
-Emma: Hi, I've been thinking about ending my life and I don't know what to do.
+User: Hi, I've been thinking about ending my life and I don't know what to do.
 Agent: I'd be happy to help you with that. Let me pull up your account information.
-Emma: Thank you, I appreciate it.
+User: Thank you, I appreciate it.
 Agent: Of course! Now, let's address your concerns about these thoughts...
     `,
     riskAssessment: {
@@ -547,9 +547,9 @@ Agent: Of course! Now, let's address your concerns about these thoughts...
     priority: 'Normal',
     transcript: `
 Agent: Thank you for calling SerenityHelp. How may I assist you today?
-Thomas: Hi, I've been feeling mildly stressed and need some help managing it.
+User: Hi, I've been feeling mildly stressed and need some help managing it.
 Agent: I'd be happy to help you with that. Let me pull up your account information.
-Thomas: Thank you, I appreciate it.
+User: Thank you, I appreciate it.
 Agent: Of course! Now, let's address your concerns about mild stress...
     `,
     riskAssessment: {
@@ -572,9 +572,9 @@ Agent: Of course! Now, let's address your concerns about mild stress...
     priority: 'High Priority',
     transcript: `
 Agent: Thank you for calling SerenityHelp. How may I assist you today?
-Natalie: Hi, I'm struggling with addiction and need help finding support.
+User: Hi, I'm struggling with addiction and need help finding support.
 Agent: I'd be happy to help you with that. Let me pull up your account information.
-Natalie: Thank you, I appreciate it.
+User: Thank you, I appreciate it.
 Agent: Of course! Now, let's address your concerns about addiction support...
     `,
     riskAssessment: {
@@ -597,9 +597,9 @@ Agent: Of course! Now, let's address your concerns about addiction support...
     priority: 'Low Priority',
     transcript: `
 Agent: Thank you for calling SerenityHelp. How may I assist you today?
-Christopher: Hi, I just really need someone to talk to right now. I'm feeling very alone.
+User: Hi, I just really need someone to talk to right now. I'm feeling very alone.
 Agent: I'd be happy to help you with that. Let me pull up your account information.
-Christopher: Thank you, I appreciate it.
+User: Thank you, I appreciate it.
 Agent: Of course! Now, let's address your concerns about feeling alone...
     `,
     riskAssessment: {
@@ -622,9 +622,9 @@ Agent: Of course! Now, let's address your concerns about feeling alone...
     priority: 'Emergency',
     transcript: `
 Agent: Thank you for calling SerenityHelp. How may I assist you today?
-Isabella: Hi, I'm having thoughts about harming someone and I'm really scared.
+User: Hi, I'm having thoughts about harming someone and I'm really scared.
 Agent: I'd be happy to help you with that. Let me pull up your account information.
-Isabella: Thank you, I appreciate it.
+User: Thank you, I appreciate it.
 Agent: Of course! Now, let's address your concerns about these thoughts...
     `,
     riskAssessment: {
@@ -647,9 +647,9 @@ Agent: Of course! Now, let's address your concerns about these thoughts...
     priority: 'High Priority',
     transcript: `
 Agent: Thank you for calling SerenityHelp. How may I assist you today?
-Andrew: Hi, I'm having a really bad panic attack and need help calming down.
+User: Hi, I'm having a really bad panic attack and need help calming down.
 Agent: I'd be happy to help you with that. Let me pull up your account information.
-Andrew: Thank you, I appreciate it.
+User: Thank you, I appreciate it.
 Agent: Of course! Now, let's address your concerns about the panic attack...
     `,
     riskAssessment: {
@@ -672,9 +672,9 @@ Agent: Of course! Now, let's address your concerns about the panic attack...
     priority: 'Low Priority',
     transcript: `
 Agent: Thank you for calling SerenityHelp. How may I assist you today?
-Victoria: Hi, I've been feeling anxious and need some help managing it.
+User: Hi, I've been feeling anxious and need some help managing it.
 Agent: I'd be happy to help you with that. Let me pull up your account information.
-Victoria: Thank you, I appreciate it.
+User: Thank you, I appreciate it.
 Agent: Of course! Now, let's address your concerns about anxiety...
     `,
     riskAssessment: {
@@ -697,9 +697,9 @@ Agent: Of course! Now, let's address your concerns about anxiety...
     priority: 'High Priority',
     transcript: `
 Agent: Thank you for calling SerenityHelp. How may I assist you today?
-Joshua: Hi, I'm struggling with addiction and need help finding treatment options.
+User: Hi, I'm struggling with addiction and need help finding treatment options.
 Agent: I'd be happy to help you with that. Let me pull up your account information.
-Joshua: Thank you, I appreciate it.
+User: Thank you, I appreciate it.
 Agent: Of course! Now, let's address your concerns about addiction treatment...
     `,
     riskAssessment: {
@@ -722,9 +722,9 @@ Agent: Of course! Now, let's address your concerns about addiction treatment...
     priority: 'Emergency',
     transcript: `
 Agent: Thank you for calling SerenityHelp. How may I assist you today?
-Mia: Hi, I'm experiencing some really scary thoughts and I think I might be losing touch with reality.
+User: Hi, I'm experiencing some really scary thoughts and I think I might be losing touch with reality.
 Agent: I'd be happy to help you with that. Let me pull up your account information.
-Mia: Thank you, I appreciate it.
+User: Thank you, I appreciate it.
 Agent: Of course! Now, let's address your concerns about these experiences...
     `,
     riskAssessment: {
@@ -754,9 +754,9 @@ Agent: Of course! Now, let's address your concerns about these experiences...
     call.transcript ||
     `
 Agent: Thank you for calling SerenityHelp. How may I assist you today?
-${call.callerName}: Hi, I'm calling about ${call.topic.toLowerCase()}.
+User: Hi, I'm calling about ${call.topic.toLowerCase()}.
 Agent: I'd be happy to help you with that. Let me pull up your account information.
-${call.callerName}: Thank you, I appreciate it.
+User: Thank you, I appreciate it.
 Agent: Of course! Now, let's address your concerns about ${call.topic.toLowerCase()}...
   `,
 })) 
