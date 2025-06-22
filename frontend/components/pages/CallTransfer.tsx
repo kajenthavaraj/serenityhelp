@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { ArrowLeftIcon, PhoneForwardedIcon } from 'lucide-react'
+import { useCallContext } from '../../contexts/CallContext'
+
 const priorityColors = {
   Emergency: 'bg-red-100 text-red-800 border-red-200',
   'High Priority': 'bg-orange-100 text-orange-800 border-orange-200',
@@ -21,9 +23,27 @@ const CallTransfer = () => {
   const location = useLocation()
   const navigate = useNavigate()
   const { call } = location.state
+  const { removeCall } = useCallContext()
+  const [showConfirmation, setShowConfirmation] = useState(false)
+
   if (!call) {
     return <div>No call data available</div>
   }
+
+  const handleResolve = () => {
+    setShowConfirmation(true)
+  }
+
+  const handleConfirmResolve = () => {
+    setShowConfirmation(false)
+    removeCall(call.id)
+    navigate('/')
+  }
+
+  const handleCancelResolve = () => {
+    setShowConfirmation(false)
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-4xl mx-auto py-8 px-4">
@@ -34,9 +54,46 @@ const CallTransfer = () => {
           <ArrowLeftIcon size={20} className="mr-2" />
           Back to Dashboard
         </button>
-        <h1 className="text-2xl font-bold text-green-600 mb-6">
-          Connected to agent: +1 (725)-332-2559
-        </h1>
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-bold text-green-600">
+            Connected to agent: +1 (725)-332-2559
+          </h1>
+          <button
+            onClick={handleResolve}
+            className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg font-medium transition-colors duration-200"
+          >
+            Resolve
+          </button>
+        </div>
+
+        {/* Confirmation Popup */}
+        {showConfirmation && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4 shadow-xl">
+              <h3 className="text-lg font-semibold text-gray-800 mb-4">
+                Confirm Resolution
+              </h3>
+              <p className="text-gray-600 mb-6">
+                Are you sure you want to resolve this issue? This action will take you back to the dashboard.
+              </p>
+              <div className="flex gap-3 justify-end">
+                <button
+                  onClick={handleCancelResolve}
+                  className="px-4 py-2 text-gray-600 hover:text-gray-800 font-medium transition-colors duration-200"
+                >
+                  No, Cancel
+                </button>
+                <button
+                  onClick={handleConfirmResolve}
+                  className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-colors duration-200"
+                >
+                  Yes, Resolve
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         <div className="bg-white rounded-lg shadow-lg overflow-hidden">
           <div className="p-6 border-b border-gray-200">
             <div className="flex justify-between items-start">
