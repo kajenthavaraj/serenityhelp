@@ -34,9 +34,20 @@ const CallTransfer = () => {
           <ArrowLeftIcon size={20} className="mr-2" />
           Back to Dashboard
         </button>
-        <h1 className="text-2xl font-bold text-green-600 mb-6">
-          Connected to agent: +1 (725)-332-2559
-        </h1>
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-bold text-green-600">
+            Connected to agent: +1 (725)-332-2559
+          </h1>
+          <button
+            onClick={() => {
+              // Handle resolve action here
+              console.log('Resolve button clicked')
+            }}
+            className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-medium transition-colors duration-200"
+          >
+            Resolve
+          </button>
+        </div>
         <div className="bg-white rounded-lg shadow-lg overflow-hidden">
           <div className="p-6 border-b border-gray-200">
             <div className="flex justify-between items-start">

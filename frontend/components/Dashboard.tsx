@@ -2,13 +2,24 @@ import React, { useState } from 'react'
 import CallLogTile from './CallLogTile'
 import CallDetailsSidebar from './CallDetailsSidebar'
 import { callLogs } from '../utils/mockData'
-import { BarChart2Icon, PhoneIcon, UserIcon } from 'lucide-react'
+import { BarChart2Icon, PhoneIcon, UserIcon, AlertTriangleIcon, UsersIcon } from 'lucide-react'
 
 const Dashboard = () => {
   const [selectedCall, setSelectedCall] = useState(null)
   const inProgressCalls = callLogs.filter(
     (call) => call.status === 'in-progress',
   )
+  
+  // Count emergency service calls (connected-to-911)
+  const emergencyServiceCalls = callLogs.filter(
+    (call) => call.status === 'connected-to-911'
+  ).length
+  
+  // Count human agent calls (connected-to-agent)
+  const humanAgentCalls = callLogs.filter(
+    (call) => call.status === 'connected-to-agent'
+  ).length
+
   // Sort calls by status (in-progress first) and then by priority
   const sortedCalls = [...callLogs].sort((a, b) => {
     // First sort by status - in-progress comes first
@@ -47,6 +58,36 @@ const Dashboard = () => {
           </div>
         </div>
       </header>
+      
+      {/* Emergency Services and Human Agent Tiles */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <div className="bg-white rounded-lg shadow p-6 border-l-4 border-red-500">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-gray-600">Emergency Services</p>
+              <p className="text-3xl font-bold text-red-600">{emergencyServiceCalls}</p>
+              <p className="text-xs text-gray-500 mt-1">Calls connected to 911</p>
+            </div>
+            <div className="bg-red-100 p-3 rounded-full">
+              <AlertTriangleIcon className="text-red-600" size={24} />
+            </div>
+          </div>
+        </div>
+        
+        <div className="bg-white rounded-lg shadow p-6 border-l-4 border-green-500">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-gray-600">Human Agents</p>
+              <p className="text-3xl font-bold text-green-600">{humanAgentCalls}</p>
+              <p className="text-xs text-gray-500 mt-1">Calls connected to humans</p>
+            </div>
+            <div className="bg-green-100 p-3 rounded-full">
+              <UsersIcon className="text-green-600" size={24} />
+            </div>
+          </div>
+        </div>
+      </div>
+      
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-xl font-semibold text-gray-800">Live Calls</h2>
       </div>
