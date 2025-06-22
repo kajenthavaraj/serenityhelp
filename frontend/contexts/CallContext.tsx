@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react'
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react'
 import { callLogs as initialCallLogs } from '../utils/mockData'
+import { websocketService, CallEvent } from '../services/websocketService'
 
 interface Call {
   id: number
@@ -25,6 +26,8 @@ interface CallContextType {
   calls: Call[]
   removeCall: (callId: number) => void
   updateCall: (callId: number, updates: Partial<Call>) => void
+  addCall: (call: Call) => void
+  connectionStatus: 'connected' | 'disconnected' | 'connecting'
 }
 
 const CallContext = createContext<CallContextType | undefined>(undefined)
