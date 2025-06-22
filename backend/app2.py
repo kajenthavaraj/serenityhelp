@@ -62,12 +62,6 @@ class CallData:
         return sentiment_analysis
     
     def update_call_priority(self):
-        # The line below will cause a TypeError because call_duration is a string.
-        # This logic is commented out for now.
-        # if self.call_duration < 10:
-        #     self.call_priority = "Analyzing"
-        #     return self.call_priority
-
         if (self.homicidal_percentage is not None and self.homicidal_percentage > 80.0) or \
            (self.psychosis_percentage is not None and self.psychosis_percentage > 80.0) or \
            (self.self_harm_percentage is not None and self.self_harm_percentage > 80.0) or \
@@ -84,47 +78,45 @@ def handle_webhook():
     data = request.json
     global call_counter
 
-    # If there are no calls going on
-    if data == None:
+    if data is None:
         return '', 204
-    
-    # If there are calls going on return data in the following format
+
+    if isinstance(data, list):
+        call_data = data[0] if data else {}
     else:
-        ####################################################################################################
-        #######################Code to extract variables goes here######################### ############## 
-        ####### Edit the data varaible to turn into a list to populate the CallData class below ############## 
-        ####################################################################################################
+        call_data = data
 
-        # Handle both single object and list of objects
-        if isinstance(data, list):
-            # If data is a list, take the first item
-            call_data = data[0] if data else {}
-        else:
-            # If data is a single object
-            call_data = data
+    call_counter += 1
+    new_call = CallData(
+        user_phone=call_data.get("user_phone"),
+        user_name=call_data.get("user_name"),
+        call_duration=call_data.get("call_duration"),
+        call_transcript=call_data.get("call_transcript"),
+        summary=call_data.get("summary")
+    )
+    new_call.id = call_counter
+    new_call.update_status_percentages()
+    new_call.update_call_priority()
+    print("--------------------------------")
+    print("Priority:", new_call.call_priority)
 
-        call_counter += 1
-        new_call = CallData(
-            user_phone=call_data.get("user_phone"),
-            user_name=call_data.get("user_name"),
-            call_duration=call_data.get("call_duration"),
-            call_transcript=call_data.get("call_transcript"),
-            summary=call_data.get("summary")
-        )
-        new_call.id = call_counter
-        new_call.update_status_percentages()
-        new_call.update_call_priority()
-        print("--------------------------------")
-        print("--------------------------------")
-        print("--------------------------------")
-        print("Priority: ", new_call.call_priority)
+    # Broadcast full report to frontend
+    socketio.emit('new_call', new_call.__dict__)
+    print("✅ WebSocket emission: new_call")
 
-        # Broadcast to frontend via WebSocket
-        print(f"📡 Broadcasting call to WebSocket: {new_call.__dict__}")
-        socketio.emit('new_call', new_call.__dict__)
-        print("✅ WebSocket emission completed")
+    return jsonify(new_call.__dict__), 200
 
-        return jsonify(new_call.__dict__), 200
+
+# ✅ NEW: Real-time transcript message endpoint
+@app.route('/live-update', methods=['POST'])
+def handle_live_update():
+    data = request.json
+    if not data:
+        return jsonify({"error": "No data provided"}), 400
+
+    print(f"🟢 Live message received: {data}")
+    socketio.emit('live_transcript_update', data)
+    return jsonify({"status": "ok"}), 200
 
 
 if __name__ == '__main__':
