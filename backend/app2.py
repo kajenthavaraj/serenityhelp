@@ -46,12 +46,13 @@ class CallData:
             return
 
         def _normalize_score(score):
-            """Normalize score to 0.99 if it's 1 or True, and 0.0 if None."""
+            """Normalize score to 99 if it's 1 or True, and 0.0 if None."""
             if score is True or score == 1:
-                return 0.99
+                return 99
             if score is None:
-                return 0.0
-            return score
+                return 0
+            else:
+                return int(score * 100)
 
         self.self_harm_percentage = _normalize_score(sentiment_analysis.get("self_harm"))
         self.homicidal_percentage = _normalize_score(sentiment_analysis.get("homicidal"))
@@ -69,6 +70,7 @@ class CallData:
 
         if (self.homicidal_percentage is not None and self.homicidal_percentage > 80.0) or \
            (self.psychosis_percentage is not None and self.psychosis_percentage > 80.0) or \
+           (self.self_harm_percentage is not None and self.self_harm_percentage > 80.0) or \
            (self.distress_percentage is not None and self.distress_percentage > 80.0):
             self.call_priority = "High Priority"
         else:
