@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>🧠 Mental Health Sentiment Analysis</title>
+</head>
+<body>
+  <h2>🧠 Mental Health Sentiment Analysis</h2>
+  <p>Test real-time crisis detection with simulated conversations and audio</p>
+
+  <div>
+    <label><b>💬 Simulated Conversation</b></label><br>
+    <textarea id="conversation" rows="3" style="width: 98%;" readonly></textarea><br><br>
+    <textarea id="inputMessage" rows="2" placeholder="Type one message at a time..." style="width: 70%;"></textarea>
+    <button onclick="addToConversation()">➕ Add to Conversation</button>
+  </div>
+
+  <hr>
+  <div>
+    <b>🎤 Audio Input</b><br>
+    <input type="file" id="audioFile" accept="audio/*">
+    <button onclick="recordAudio()">🎙️ Record Audio</button>
+  </div>
+
+  <br>
+  <button onclick="analyze()">🔍 Analyze Mental Health Risk</button>
+
+  <h4>📊 Analysis Results</h4>
+  <pre id="resultBox" style="background-color: #f0f0f0; padding: 10px;"></pre>
+
+  <script>
+    function addToConversation() {
+      const input = document.getElementById('inputMessage').value.trim();
+      if (input !== '') {
+        document.getElementById('conversation').value += input + "\n";
+        document.getElementById('inputMessage').value = '';
+      }
+    }
+
+    function analyze() {
+      const convo = document.getElementById('conversation').value.trim();
+      const audioInput = document.getElementById('audioFile');
+      const resultBox = document.getElementById('resultBox');
+
+      if (audioInput.files.length > 0) {
+        const formData = new FormData();
+        formData.append('text', convo);
+        formData.append('audio', audioInput.files[0]);
+
+        fetch('/analyze_audio', {
+          method: 'POST',
+          body: formData
+        })
+        .then(res => res.json())
+        .then(data => resultBox.innerText = JSON.stringify(data, null, 2))
+        .catch(err => resultBox.innerText = 'Error: ' + err);
+      } else {
+        fetch('/analyze', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text: convo })
+        })
+        .then(res => res.json())
+        .then(data => resultBox.innerText = JSON.stringify(data, null, 2))
+        .catch(err => resultBox.innerText = 'Error: ' + err);
+      }
+    }
+
+    function recordAudio() {
+      alert("🛠️ Audio recording not implemented yet. You can upload a file instead.");
+    }
+  </script>
+</body>
+</html>
