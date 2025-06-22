@@ -2,35 +2,37 @@ import React, { useState } from 'react'
 import CallLogTile from './CallLogTile'
 import CallDetailsSidebar from './CallDetailsSidebar'
 import { useCallContext } from '../contexts/CallContext'
-import { BarChart2Icon, PhoneIcon, UserIcon, AlertTriangleIcon, UsersIcon } from 'lucide-react'
+import {
+  PhoneIcon,
+  AlertTriangleIcon,
+  UsersIcon,
+} from 'lucide-react'
 
 const Dashboard = () => {
-  const [selectedCall, setSelectedCall] = useState<any>(null)
+  const [selectedCallId, setSelectedCallId] = useState<number | null>(null)
   const { calls } = useCallContext()
-  
+
+  const selectedCall = calls.find((call) => call.id === selectedCallId)
+
   const inProgressCalls = calls.filter(
     (call) => call.status === 'in-progress',
   )
-  
-  // Count emergency service calls (connected-to-911)
+
   const emergencyServiceCalls = calls.filter(
     (call) => call.status === 'connected-to-911'
   ).length
-  
-  // Count human agent calls (connected-to-agent)
+
   const humanAgentCalls = calls.filter(
     (call) => call.status === 'connected-to-agent'
   ).length
 
-  // Sort calls by status (in-progress first) and then by priority
   const sortedCalls = [...calls].sort((a, b) => {
-    // First sort by status - in-progress comes first
     if (a.status === 'in-progress' && b.status !== 'in-progress') return -1
     if (a.status !== 'in-progress' && b.status === 'in-progress') return 1
-    // Then sort emergency calls (which will be connected to 911)
+
     if (a.priority === 'Emergency' && b.priority !== 'Emergency') return -1
     if (a.priority !== 'Emergency' && b.priority === 'Emergency') return 1
-    // Then sort by priority within each status group
+
     const priorityOrder: Record<string, number> = {
       'High Priority': 2,
       Normal: 3,
@@ -38,6 +40,7 @@ const Dashboard = () => {
     }
     return (priorityOrder[a.priority] || 1) - (priorityOrder[b.priority] || 1)
   })
+
   return (
     <div className="w-full min-h-screen bg-gray-50 p-6">
       <header className="mb-8">
@@ -62,7 +65,7 @@ const Dashboard = () => {
           </div>
         </div>
       </header>
-      
+
       {/* Emergency Services and Human Agent Tiles */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
         <div className="bg-white rounded-lg shadow p-6 border-l-4 border-red-500">
@@ -77,7 +80,7 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
-        
+
         <div className="bg-white rounded-lg shadow p-6 border-l-4 border-green-500">
           <div className="flex items-center justify-between">
             <div>
@@ -91,25 +94,27 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-      
+
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-xl font-semibold text-gray-800">Live Calls</h2>
       </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {sortedCalls.map((call) => (
           <CallLogTile
             key={call.id}
             call={call}
-            onViewDetails={() => setSelectedCall(call)}
+            onViewDetails={() => setSelectedCallId(call.id)}
           />
         ))}
       </div>
+
       <CallDetailsSidebar
         call={selectedCall}
-        onClose={() => setSelectedCall(null)}
+        onClose={() => setSelectedCallId(null)}
       />
     </div>
   )
 }
 
-export default Dashboard 
+export default Dashboard
