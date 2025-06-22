@@ -158,12 +158,48 @@ export const CallProvider: React.FC<CallProviderProps> = ({ children }) => {
       console.log('❌ WebSocket disconnected')
     }
 
+    const handleCallStatusUpdate = (data: any) => {
+      setCalls(prevCalls => 
+        prevCalls.map(call => 
+          call.id === data.call_id 
+            ? { ...call, status: data.status }
+            : call
+        )
+      )
+    }
+
+    const handleRiskAssessmentUpdate = (data: any) => {
+      setCalls(prevCalls => 
+        prevCalls.map(call => 
+          call.id === data.call_id 
+            ? { 
+                ...call, 
+                riskAssessment: data.risk_assessment 
+              }
+            : call
+        )
+      )
+    }
+
+    const handleTranscriptUpdate = (data: any) => {
+      setCalls(prevCalls => 
+        prevCalls.map(call => 
+          call.id === data.call_id 
+            ? { ...call, transcript: data.transcript }
+            : call
+        )
+      )
+    }
+
     // Register event listeners
     websocketService.on('newCall', handleNewCall)
     websocketService.on('callUpdate', handleCallUpdate)
     websocketService.on('callEnd', handleCallEnd)
     websocketService.on('connected', handleConnected)
     websocketService.on('disconnected', handleDisconnected)
+    websocketService.on('callStatusUpdate', handleCallStatusUpdate)
+    websocketService.on('riskAssessmentUpdate', handleRiskAssessmentUpdate)
+    websocketService.on('transcriptUpdate', handleTranscriptUpdate)
 
     // Cleanup on unmount
     return () => {
@@ -172,6 +208,9 @@ export const CallProvider: React.FC<CallProviderProps> = ({ children }) => {
       websocketService.off('callEnd', handleCallEnd)
       websocketService.off('connected', handleConnected)
       websocketService.off('disconnected', handleDisconnected)
+      websocketService.off('callStatusUpdate', handleCallStatusUpdate)
+      websocketService.off('riskAssessmentUpdate', handleRiskAssessmentUpdate)
+      websocketService.off('transcriptUpdate', handleTranscriptUpdate)
       websocketService.disconnect()
     }
   }, [calls, nextId])

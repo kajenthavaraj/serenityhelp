@@ -1,5 +1,5 @@
 export interface CallEvent {
-  type: 'new_call' | 'call_update' | 'call_end' | 'call_transfer'
+  type: 'new_call' | 'call_update' | 'call_end' | 'call_transfer' | 'call_status_update' | 'risk_assessment_update' | 'transcript_update' | 'frontend_update'
   data: {
     user_phone: string
     user_name: string
@@ -76,9 +76,37 @@ class WebSocketService {
       case 'call_transfer':
         this.emit('callTransfer', event.data)
         break
+      case 'call_status_update':
+        this.handleCallStatusUpdate(event.data)
+        break
+      case 'risk_assessment_update':
+        this.handleRiskAssessmentUpdate(event.data)
+        break
+      case 'transcript_update':
+        this.handleTranscriptUpdate(event.data)
+        break
+      case 'frontend_update':
+        this.handleFrontendUpdate(event.data)
+        break
       default:
         console.warn('Unknown event type:', event.type)
     }
+  }
+
+  private handleCallStatusUpdate = (data: any) => {
+    this.emit('callStatusUpdate', data)
+  }
+
+  private handleRiskAssessmentUpdate = (data: any) => {
+    this.emit('riskAssessmentUpdate', data)
+  }
+
+  private handleTranscriptUpdate = (data: any) => {
+    this.emit('transcriptUpdate', data)
+  }
+
+  private handleFrontendUpdate = (data: any) => {
+    this.emit('frontendUpdate', data)
   }
 
   private attemptReconnect() {

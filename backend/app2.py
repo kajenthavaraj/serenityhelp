@@ -1,7 +1,12 @@
 from flask import Flask, request, jsonify
+from flask_socketio import SocketIO, emit
+import eventlet
 import requests
 
+eventlet.monkey_patch()
+
 app = Flask(__name__)
+socketio = SocketIO(app, cors_allowed_origins="*")
 
 class CallData:
     def __init__(self, user_phone, user_name, call_duration, call_transcript, summary):
@@ -54,19 +59,20 @@ def handle_webhook():
         ####### Edit the data varaible to turn into a list to populate the CallData class below ############## 
         ####################################################################################################
 
-        list_of_calls = []
-        for call in data:
-            call_data = CallData(
-                user_phone=call.get("user_phone"),
-                user_name=call.get("user_name"),
-                call_duration=call.get("call_duration"),
-                call_transcript=call.get("call_transcript"),
-                summary=call.get("summary")
-            )
-            call_data.update_status_percentages()
-            list_of_calls.append(call_data)
+        new_call = CallData(
+            user_phone=data.get("user_phone"),
+            user_name=data.get("user_name"),
+            call_duration=data.get("call_duration"),
+            call_transcript=data.get("call_transcript"),
+            summary=data.get("summary")
+        )
+        new_call.update_status_percentages()
 
-        return jsonify(list_of_calls), 200
+        # Broadcast to frontend via WebSocket
+        socketio.emit('new_call', new_call)
+
+        return jsonify(new_call), 200
+
 
 if __name__ == '__main__':
     app.run(port=5000)
