@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   PhoneIcon,
   PhoneIncomingIcon,
@@ -30,6 +30,21 @@ const priorityColors = {
 }
 const CallLogTile = ({ call, onViewDetails }) => {
   const navigate = useNavigate()
+  const [highlight, setHighlight] = useState(call.isNew)
+
+  useEffect(() => {
+    if (call.isNew) {
+      setHighlight(true)
+      const timer = setTimeout(() => {
+        setHighlight(false)
+        // Optionally, you might want to remove the `isNew` flag from the context state
+        // to prevent re-highlighting on re-renders, but that requires a function passed from the context.
+        // For now, this local state will handle the visual effect.
+      }, 3000)
+      return () => clearTimeout(timer)
+    }
+  }, [call.id, call.isNew]) // Depend on call.id to re-trigger for updates to the same call
+
   const handleConnect = (e) => {
     e.stopPropagation()
     navigate('/transfer', {
@@ -38,8 +53,13 @@ const CallLogTile = ({ call, onViewDetails }) => {
       },
     })
   }
+
+  const highlightClass = highlight ? 'highlight-new' : ''
+
   return (
-    <div className="bg-white rounded-lg shadow overflow-hidden hover:shadow-md transition-shadow relative">
+    <div
+      className={`bg-white rounded-lg shadow overflow-hidden hover:shadow-md transition-shadow relative ${highlightClass}`}
+    >
       {call.status === 'in-progress' && (
         <button
           onClick={handleConnect}

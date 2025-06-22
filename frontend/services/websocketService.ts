@@ -1,124 +1,79 @@
-export interface CallEvent {
-  type: 'new_call' | 'call_update' | 'call_end' | 'call_transfer' | 'call_status_update' | 'risk_assessment_update' | 'transcript_update' | 'frontend_update'
-  data: {
-    user_phone: string
-    user_name: string
-    call_duration: string
-    self_harm_percentage: number
-    homicidal_percentage: number
-    psychosis_percentage: number
-    distress_percentage: number
-    call_priority: string
-    call_transcript: string
-    summary: string
-  }
+import io from "socket.io-client";
+
+export interface CallData {
+  id: number
+  user_phone: string
+  user_name: string
+  call_duration: string
+  self_harm_percentage: number
+  homicidal_percentage: number | null
+  psychosis_percentage: number
+  distress_percentage: number
+  call_priority: string | number
+  call_transcript: string
+  summary: string
 }
 
 class WebSocketService {
-  private ws: WebSocket | null = null
+  private socket: ReturnType<typeof io> | null = null
   private reconnectAttempts = 0
   private maxReconnectAttempts = 5
   private reconnectDelay = 1000
   private eventListeners: Map<string, Function[]> = new Map()
   private isConnecting = false
 
-  connect(url: string = 'ws://localhost:5000/ws') {
-    if (this.isConnecting) return
+  connect(url: string = 'http://localhost:5001') {
+    if (this.isConnecting || this.socket?.connected) return
     
     try {
       this.isConnecting = true
-      this.ws = new WebSocket(url)
+      this.socket = io(url, {
+        reconnectionAttempts: this.maxReconnectAttempts,
+        reconnectionDelay: this.reconnectDelay,
+      })
       
-      this.ws.onopen = () => {
-        console.log('✅ WebSocket connected to Flask backend')
+      this.socket.on('connect', () => {
+        console.log('✅ Connected to Flask Socket.IO backend. Socket ID:', this.socket?.id)
         this.reconnectAttempts = 0
         this.isConnecting = false
         this.emit('connected')
-      }
+        this.socket?.emit('frontend_ready')
+      })
 
-      this.ws.onmessage = (event) => {
-        try {
-          const callEvent: CallEvent = JSON.parse(event.data)
-          this.handleCallEvent(callEvent)
-        } catch (error) {
-          console.error('Error parsing WebSocket message:', error)
-        }
-      }
-
-      this.ws.onclose = () => {
-        console.log('❌ WebSocket disconnected from Flask backend')
+      this.socket.on('disconnect', () => {
+        console.log('❌ Disconnected from Flask Socket.IO backend')
         this.isConnecting = false
         this.emit('disconnected')
-        this.attemptReconnect()
-      }
+      })
 
-      this.ws.onerror = (error) => {
-        console.error('❌ WebSocket error:', error)
+      this.socket.on('connect_error', (error: any) => {
+        console.error('❌ Socket.IO connection error:', error)
         this.isConnecting = false
-      }
+      })
+
+      this.socket.on('new_call', (callData: CallData) => {
+        console.log('📞 Received new call via WebSocket:', callData)
+        this.emit('newCall', callData)
+      })
+
+      this.socket.on('call_status_update', (data: any) => {
+        console.log('🔄 Received call status update:', data)
+        this.emit('callStatusUpdate', data)
+      })
+
+      this.socket.on('risk_assessment_update', (data: any) => {
+        console.log('⚠️ Received risk assessment update:', data)
+        this.emit('riskAssessmentUpdate', data)
+      })
+
+      this.socket.on('transcript_update', (data: any) => {
+        console.log('📝 Received transcript update:', data)
+        this.emit('transcriptUpdate', data)
+      })
+
     } catch (error) {
-      console.error('Failed to connect WebSocket:', error)
+      console.error('Failed to connect Socket.IO:', error)
       this.isConnecting = false
-    }
-  }
-
-  private handleCallEvent(event: CallEvent) {
-    switch (event.type) {
-      case 'new_call':
-        this.emit('newCall', event.data)
-        break
-      case 'call_update':
-        this.emit('callUpdate', event.data)
-        break
-      case 'call_end':
-        this.emit('callEnd', event.data.user_phone)
-        break
-      case 'call_transfer':
-        this.emit('callTransfer', event.data)
-        break
-      case 'call_status_update':
-        this.handleCallStatusUpdate(event.data)
-        break
-      case 'risk_assessment_update':
-        this.handleRiskAssessmentUpdate(event.data)
-        break
-      case 'transcript_update':
-        this.handleTranscriptUpdate(event.data)
-        break
-      case 'frontend_update':
-        this.handleFrontendUpdate(event.data)
-        break
-      default:
-        console.warn('Unknown event type:', event.type)
-    }
-  }
-
-  private handleCallStatusUpdate = (data: any) => {
-    this.emit('callStatusUpdate', data)
-  }
-
-  private handleRiskAssessmentUpdate = (data: any) => {
-    this.emit('riskAssessmentUpdate', data)
-  }
-
-  private handleTranscriptUpdate = (data: any) => {
-    this.emit('transcriptUpdate', data)
-  }
-
-  private handleFrontendUpdate = (data: any) => {
-    this.emit('frontendUpdate', data)
-  }
-
-  private attemptReconnect() {
-    if (this.reconnectAttempts < this.maxReconnectAttempts) {
-      this.reconnectAttempts++
-      console.log(`🔄 Attempting to reconnect (${this.reconnectAttempts}/${this.maxReconnectAttempts})`)
-      
-      setTimeout(() => {
-        this.connect()
-      }, this.reconnectDelay * this.reconnectAttempts)
-    } else {
-      console.error('❌ Max reconnection attempts reached')
     }
   }
 
@@ -147,44 +102,18 @@ class WebSocketService {
   }
 
   disconnect() {
-    if (this.ws) {
-      this.ws.close()
-      this.ws = null
+    if (this.socket) {
+      this.socket.disconnect()
+      this.socket = null
     }
   }
 
-  send(message: any) {
-    if (this.ws && this.ws.readyState === WebSocket.OPEN) {
-      this.ws.send(JSON.stringify(message))
+  send(event: string, data?: any) {
+    if (this.socket && this.socket.connected) {
+      this.socket.emit(event, data)
     } else {
-      console.warn('WebSocket is not connected')
+      console.warn('Socket.IO is not connected')
     }
-  }
-
-  // Test methods for debugging
-  sendTestMessage() {
-    this.send({
-      type: 'ping',
-      message: 'Hello from React frontend!'
-    })
-  }
-
-  simulateNewCall() {
-    this.send({
-      type: 'simulate_call',
-      data: {
-        user_phone: '+1 (555) 999-9999',
-        user_name: 'Test User',
-        call_duration: '2m 30s',
-        self_harm_percentage: 25,
-        homicidal_percentage: 5,
-        psychosis_percentage: 15,
-        distress_percentage: 40,
-        call_priority: 'Normal',
-        call_transcript: 'Agent: Hello, how can I help you today?\nUser: Hi, this is a test call.',
-        summary: 'Test call for WebSocket functionality.'
-      }
-    })
   }
 }
 

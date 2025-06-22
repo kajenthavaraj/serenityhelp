@@ -10,7 +10,7 @@ interface Call {
   status: string
   topic: string
   summary: string
-  priority: string
+  priority: string | number
   transcript: string
   riskAssessment: {
     selfHarm: number
@@ -20,6 +20,7 @@ interface Call {
   }
   date?: string
   time?: string
+  isNew?: boolean
 }
 
 interface CallContextType {
@@ -72,55 +73,54 @@ export const CallProvider: React.FC<CallProviderProps> = ({ children }) => {
 
     // Set up event listeners
     const handleNewCall = (callData: any) => {
-      console.log('🆕 New call received from WebSocket:', callData)
-      
-      // Check if call already exists
-      const existingCall = calls.find(call => call.user_phone === callData.user_phone)
-      if (existingCall) {
-        console.log('📝 Updating existing call:', callData.user_name)
-        setCalls(prevCalls => 
-          prevCalls.map(call => 
-            call.user_phone === callData.user_phone ? {
-              ...call,
-              call_duration: callData.call_duration,
-              priority: callData.call_priority,
-              transcript: callData.call_transcript,
-              summary: callData.summary,
-              riskAssessment: {
-                selfHarm: callData.self_harm_percentage,
-                distress: callData.distress_percentage,
-                homicidal: callData.homicidal_percentage,
-                psychosis: callData.psychosis_percentage
-              }
-            } : call
-          )
-        )
-      } else {
-        console.log('➕ Adding new call:', callData.user_name)
-        // Convert WebSocket data to frontend format
-        const newCall: Call = {
-          id: nextId,
-          user_phone: callData.user_phone,
-          user_name: callData.user_name,
-          call_duration: callData.call_duration,
-          status: 'in-progress',
-          topic: callData.summary?.split(' ')[0] || 'General',
-          summary: callData.summary,
-          priority: callData.call_priority,
-          transcript: callData.call_transcript,
-          riskAssessment: {
-            selfHarm: callData.self_harm_percentage,
-            distress: callData.distress_percentage,
-            homicidal: callData.homicidal_percentage,
-            psychosis: callData.psychosis_percentage
-          },
-          date: new Date().toLocaleDateString(),
-          time: new Date().toLocaleTimeString()
-        }
-        
-        setCalls(prevCalls => [newCall, ...prevCalls])
-        setNextId(prev => prev + 1)
+      console.log('🆕 New call received in context:', callData)
+
+      const newCall: Call = {
+        id: callData.id || nextId,
+        user_phone: callData.user_phone,
+        user_name: callData.user_name,
+        call_duration: callData.call_duration,
+        status: 'in-progress',
+        topic: callData.summary?.split(' ')[0] || 'General',
+        summary: callData.summary,
+        priority: callData.call_priority,
+        transcript: callData.call_transcript,
+        riskAssessment: {
+          selfHarm: callData.self_harm_percentage || 0,
+          distress: callData.distress_percentage || 0,
+          homicidal: callData.homicidal_percentage || 0,
+          psychosis: callData.psychosis_percentage || 0
+        },
+        date: new Date().toLocaleDateString(),
+        time: new Date().toLocaleTimeString()
       }
+
+      setCalls(prevCalls => {
+        const existingCallIndex = prevCalls.findIndex(
+          call => call.user_phone === newCall.user_phone
+        );
+
+        if (existingCallIndex !== -1) {
+          // Phone number exists, update the call
+          console.log(`📞 Found existing call for ${newCall.user_phone}. Updating tile.`);
+          const updatedCalls = [...prevCalls];
+          const existingCall = updatedCalls[existingCallIndex];
+          
+          updatedCalls[existingCallIndex] = { 
+            ...existingCall,
+            ...newCall,
+            id: existingCall.id, // Ensure original ID is preserved
+            isNew: true, // Highlight updated calls
+          };
+          return updatedCalls;
+
+        } else {
+          // New phone number, add a new call
+          console.log(`📞 No existing call for ${newCall.user_phone}. Creating new tile.`);
+          setNextId(prev => Math.max(prev, newCall.id) + 1);
+          return [{ ...newCall, isNew: true }, ...prevCalls];
+        }
+      });
     }
 
     const handleCallUpdate = (callData: any) => {

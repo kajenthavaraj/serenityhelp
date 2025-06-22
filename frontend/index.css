@@ -3,3 +3,22 @@
 @tailwind components;
 @tailwind utilities;
 /* DO NOT DELETE THESE TAILWIND IMPORTS, OTHERWISE THE STYLING WILL NOT RENDER AT ALL */ 
+
+.highlight-new {
+  animation: highlight-and-fade 3s ease-out;
+}
+
+@keyframes highlight-and-fade {
+  0% {
+    background-color: #dcfce7; /* A light green color */
+    box-shadow: 0 0 12px 2px #86efac;
+  }
+  70% {
+    background-color: #dcfce7;
+    box-shadow: 0 0 12px 2px #86efac;
+  }
+  100% {
+    background-color: #ffffff; /* Fade back to white */
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+} 
